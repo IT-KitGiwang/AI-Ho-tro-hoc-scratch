@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, jsonify, session
 import google.generativeai as genai
 import PyPDF2
 import re
-import tomli
+from dotenv import load_dotenv
+load_dotenv()
 import os
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
@@ -10,9 +11,7 @@ import time
 from flask_session import Session  # ✅ để lưu session người dùng
 
 # ================== CẤU HÌNH & KHỞI TẠO ==================
-with open("pyproject.toml", "rb") as f:
-    config = tomli.load(f)
-api_key = config["secrets"]["GEMINI_API_KEY"]
+api_key = os.getenv("GEMINI_API_KEY")
 
 if not api_key:
     raise ValueError("❌ Không tìm thấy GEMINI_API_KEY trong biến môi trường!")
