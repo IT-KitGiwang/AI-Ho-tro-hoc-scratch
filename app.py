@@ -10,7 +10,7 @@ import time
 from flask_session import Session  # ✅ để lưu session người dùng
 
 # ================== CẤU HÌNH & KHỞI TẠO ==================
-with open("config.toml", "rb") as f:
+with open("pyproject.toml", "rb") as f:
     config = tomli.load(f)
 api_key = config["secrets"]["GEMINI_API_KEY"]
 
