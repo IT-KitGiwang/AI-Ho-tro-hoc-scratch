@@ -22,7 +22,7 @@ GENERATION_MODEL = 'gemini-2.5-flash-lite'
 EMBEDDING_MODEL = 'text-embedding-004'
 
 app = Flask(__name__)
-app.secret_key = "1234"  # ⚠️ cần có key để session hoạt động
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "fallback-secret-key-123") 
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
