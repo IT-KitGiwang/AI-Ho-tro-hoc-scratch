@@ -1,7 +1,8 @@
-Flask==2.3.3
-flask-session==0.5.0
-google-generativeai==0.3.2
-PyPDF2==3.0.1
-numpy==2.3.4
-tomli==2.0.1
-scikit-learn==1.3.2
+flask
+gunicorn # 💡 Quan trọng: Render cần Gunicorn để chạy ứng dụng Python
+google-generativeai
+PyPDF2
+python-dotenv
+numpy
+scikit-learn
+flask-session
