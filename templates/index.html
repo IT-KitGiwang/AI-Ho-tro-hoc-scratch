@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Hỗ Trợ Học Lập Trình</title>
+  <style>
+    /* 🌟 Tổng thể */
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #a8e6ff 0%, #fff8e1 100%);
+      color: #333;
+    }
+
+    /* 🌈 Khung chính chia đôi */
+    .container {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* 🧩 Cột bên trái (tab hướng dẫn & dự án) */
+    .sidebar {
+      background: white;
+      border-right: 2px solid #e0f7fa;
+      display: flex;
+      flex-direction: column;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+
+    .sidebar h2 {
+      color: #007bff;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .nav-tabs a {
+      background-color: #e3f2fd;
+      color: #007bff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .nav-tabs a:hover {
+      background-color: #bbdefb;
+      transform: scale(1.03);
+    }
+
+    /* 💬 Khung chat */
+    .chat-container {
+      flex: 1;
+      background-color: #fefefe;
+      display: flex;
+      flex-direction: column;
+      box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+
+    /* Tiêu đề chat */
+    .chat-header {
+      background-color: #007bff;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    /* Nội dung tin nhắn */
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background-image: url('https://i.imgur.com/PN7R7jX.png');
+      background-size: cover;
+      background-blend-mode: lighten;
+    }
+
+    /* Tin nhắn */
+    .message {
+      margin-bottom: 15px;
+      padding: 12px 15px;
+      border-radius: 15px;
+      max-width: 75%;
+      line-height: 1.4;
+      font-size: 15px;
+      word-wrap: break-word;
+    }
+
+    .user-message {
+      background-color: #007bff;
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 0;
+      display: table;
+      max-width: 75%;
+    }
+
+    .ai-message {
+      background-color: #f1f9ff;
+      border: 1px solid #cce5ff;
+      margin-right: auto;
+      border-bottom-left-radius: 0;
+      color: #333;
+    }
+
+    /* Ô nhập */
+    .chat-input {
+      display: flex;
+      padding: 15px;
+      border-top: 2px solid #e0f7fa;
+      background-color: #ffffff;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 2px solid #007bff;
+      border-radius: 25px;
+      outline: none;
+      font-size: 15px;
+      transition: 0.2s;
+    }
+
+    .chat-input input:focus {
+      border-color: #0056b3;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    .chat-input button {
+      margin-left: 10px;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .chat-input button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    /* 🟡 Highlight, strong, em */
+    .highlight {
+      background-color: #fff9c4;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .ai-message strong {
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    .ai-message em {
+      color: #28a745;
+      font-style: italic;
+    }
+
+    /* ⚙️ Scroll đẹp */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: #90caf9;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: #64b5f6;
+    }
+
+    /* 📱 Giao diện Mobile */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 2px solid #e0f7fa;
+        padding: 10px;
+      }
+
+      .sidebar h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      .nav-tabs {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .nav-tabs a {
+        flex: 1 1 45%;
+        font-size: 14px;
+        padding: 8px 10px;
+      }
+
+      .chat-container {
+        height: calc(100vh - 260px);
+      }
+
+      .chat-header {
+        font-size: 16px;
+        padding: 10px;
+      }
+
+      .chat-messages {
+        padding: 10px;
+        font-size: 14px;
+      }
+
+      /* 📱 Chatbot nhỏ gọn trên mobile */
+      .message {
+        font-size: 13px;
+        padding: 8px 10px;
+        border-radius: 10px;
+        max-width: 90%;
+        line-height: 1.4;
+      }
+
+      .ai-message {
+        background-color: #f9fcff;
+        border: 1px solid #d1eaff;
+        font-size: 13px;
+      }
+
+      .user-message {
+        background-color: #0d6efd;
+        font-size: 13px;
+        padding: 8px 12px;
+      }
+
+      /* 📱 Khung nhập và nút */
+      .chat-input {
+        flex-direction: column;
+        gap: 8px;
+        padding: 10px;
+      }
+
+      .chat-input input {
+        font-size: 14px;
+        padding: 10px;
+      }
+
+      .chat-input button {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- 🌟 Sidebar -->
+    <div class="sidebar">
+      <h2 style="color: red;border:3px solid orange;padding:15px 5px;">CÁC TÍNH NĂNG KHÁC</h2>
+      <div class="nav-tabs">
+        <a href="https://www.canva.com/vi_vn/tao-anh-ai/">🎮 Tạo Hình ảnh bằng AI</a>
+        <a href="https://www.canva.com/vi_vn/thiet-ke/viet-truyen-bang-ai/">📖 Tạo Truyện bằng AI</a>
+        <a href="/guide">📚 Bài học ví dụ</a>
+        <a href="https://mindxdoc.github.io/">📂 Dự Án Mẫu</a>
+        <img src="https://website-dev.hn.ss.bfcplatform.vn/a_U32_Kthdi_U_Gu_Os_C_Ho_S_Gd_ZX_Ysavv_Y_Ky4vc_B0_WX_Lnm_Qg_AN_Bn2_X_747b76ba9e.jpeg" alt="Logo Dự án AI" style="
+        display: block;
+        margin: 20px auto;
+        width: 300px;
+        max-width: 90%;
+        height: auto;
+        border-radius: 200
+        px;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+        ">
+      </div>
+    </div>
+
+    <!-- 💬 Chat -->
+    <div class="chat-container">
+      <div class="chat-header">💡AI HƯỚNG DẪN HỌC LẬP TRÌNH SCRATCH TÍCH HỢP TEACHABLE MACHINE</div>
+      <div class="chat-messages" id="chat-messages">
+        <div class="message ai-message">
+          <div style="
+              background:#FAFAFA;
+              border-left:6px solid #FFB300;
+              padding:10px 15px;
+              border-radius:8px;
+              line-height:2;
+              font-size:15px;
+              color:#212121;
+              font-family:'Segoe UI', sans-serif;">
+            Chào con! Thầy là giáo viên dạy lập trình sáng tạo, hỗ trợ các con học lập trình, đặc biệt là về
+            <span style="line-height:1.6; background:#FFAB19; color:white; font-weight:bold; padding:2px 4px; border-radius:4px;">Scratch</span>
+            và
+            <span style="line-height:1.6; background:#CF63CF; color:white; font-weight:bold; padding:2px 4px; border-radius:4px;">Teachable Machine</span>.
+            <br>Thầy rất vui được đồng hành cùng con trong hành trình khám phá thế giới lập trình đầy màu sắc và sáng tạo.
+            <br>Chúng ta sẽ cùng nhau tạo ra những trò chơi thú vị, những câu chuyện tương tác và khám phá những điều kỳ diệu của công nghệ.<br>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input">
+        <input type="text" id="message-input" placeholder="Nhập câu hỏi của bạn..." />
+        <button onclick="sendMessage()">Gửi</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function sendMessage() {
+      const input = document.getElementById('message-input');
+      const message = input.value.trim();
+      if (message === '') return;
+
+      addMessage(message, 'user');
+      input.value = '';
+
+      fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: message }),
+      })
+        .then(response => response.json())
+        .then(data => addMessage(data.response, 'ai'))
+        .catch(() => addMessage('⚠️ Xin lỗi, có lỗi xảy ra. Vui lòng thử lại.', 'ai'));
+    }
+
+    function addMessage(text, sender) {
+      const messagesDiv = document.getElementById('chat-messages');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `message ${sender}-message`;
+      msgDiv.innerHTML = text;
+      messagesDiv.appendChild(msgDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    document.getElementById('message-input').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') sendMessage();
+    });
+  </script>
+</body>
+
+</html>
